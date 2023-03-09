@@ -1,6 +1,10 @@
 // https://www.npmjs.com/package/inquirer
 const inquirer = require('inquirer');
+const inquirerPrompt = require('inquirer-autocomplete-prompt');
+const { searchDataset, searchUnitBusiness } = require('./searchs');
 require("colors");
+
+inquirer.registerPrompt('autocomplete', inquirerPrompt);
 
 const preguntas = [
   {
@@ -28,7 +32,6 @@ const inquirerMenu = async () => {
   console.log("=====================\n".cyan);
 
   const { opcion } = await inquirer.prompt(preguntas);
-
   return opcion;
 };
 
@@ -46,12 +49,84 @@ const loading = async () => {
 };
 
 // Leer lo que el usuario escribe al crear una lista
-const leerInputs = async (message) => {
-  const question = [
+const leerInputs = async ( option ) => {
+
+  if (option === 'all') {
+    const data = [
+      {
+        type: 'autocomplete',
+        suggestOnly: false,
+        searchText: 'Buscando en db...',
+        emptyText: 'No se encontro resultados, verificar db.',
+        name: "dataset",
+        message : "dataset:",
+        validate(value) {
+          if (value.length === 0) {
+            return "Por favor ingrese un valor 🤖";
+          } else {
+            return true
+          }
+        },
+        source: searchDataset,
+      },
+      {
+        type: 'autocomplete',
+        suggestOnly: false,
+        searchText: 'Buscando en db...',
+        emptyText: 'No se encontro resultados, verificar db.',
+        name: "unitbusiness",
+        message : "unitbusiness:",
+        validate(value) {
+          if (value.length === 0) {
+            return "Por favor ingrese un valor 🤖";
+          } else {
+            return true;
+          }
+        },
+        source: searchUnitBusiness
+      },
+      {
+        type: 'input',
+        name: "date",
+        message : "date:",
+        validate(value) {
+          if (value.length === 0) {
+            return "Por favor ingrese un valor 🤖";
+          } else {
+            return true;
+          }
+        },
+      },
+    ];
+
+    const up = await inquirer.prompt(data);
+    return up;
+  }
+
+  const data = [
     {
-      type: "input",
-      name: "info",
-      message,
+      type: 'autocomplete',
+      suggestOnly: false,
+      searchText: 'Buscando en db...',
+      emptyText: 'No se encontro resultados, verificar db.',
+      name: "dataset",
+      message : "dataset:",
+      validate(value) {
+        if (value.length === 0) {
+          return "Por favor ingrese un valor 🤖";
+        } else {
+          return true
+        }
+      },
+      source: searchDataset,
+    },
+    {
+      type: 'autocomplete',
+      suggestOnly: false,
+      searchText: 'Buscando en db...',
+      emptyText: 'No se encontro resultados, verificar db.',
+      name: "unitbusiness",
+      message : "unitbusiness:",
       validate(value) {
         if (value.length === 0) {
           return "Por favor ingrese un valor 🤖";
@@ -59,11 +134,12 @@ const leerInputs = async (message) => {
           return true;
         }
       },
+      source: searchUnitBusiness
     },
   ];
 
-  const { info } = await inquirer.prompt(question);
-  return info;
+  const up = await inquirer.prompt(data);
+  return up;
 };
 
 const continuar = async() => {

@@ -14,7 +14,9 @@
     "colors": "^1.4.0",
     "dotenv": "^16.0.3",
     "inquirer": "^8.2.5",
-    "inquirer-autocomplete-prompt": "^2.0.0",
-    "uuid": "^9.0.0"
+    "inquirer-autocomplete-prompt": "^2.0.0"
+  },
+  "devDependencies": {
+    "fuzzy": "^0.1.3"
   }
 }

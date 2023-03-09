@@ -1,9 +1,5 @@
 const { inquirerMenu, leerInputs, loading, continuar } = require("./helpers/inquirer");
 const { resetJobBookmark, triggerGlue } = require("./helpers/runcommands");
-// const { readDB } = require("./helpers/saveFile");
-
-
-// const Tools = require('./models/tools');
 
 const main = async () => {
 
@@ -16,40 +12,34 @@ const main = async () => {
         // RESET JOB BOOKMARK
         if (opt == 'reset' ) {
 
-            const dataset = await leerInputs("dataset:");
-            const unitbusiness = await leerInputs("unitbusiness:");
-            // const date = await leerInputs("date:");
-
+            const { dataset, unitbusiness } = await leerInputs(option='one');
             await resetJobBookmark( dataset, unitbusiness, done = true );
-
+            await loading();
         }
 
         // TRIGGER GLUE JOB
         if (opt == 'trigger' ) {
 
-            const dataset = await leerInputs("dataset:");
-            const unitbusiness = await leerInputs("unitbusiness:");
-            const date = await leerInputs("date:");
-            // const bucket_profile = await leerInputs("bucket_profile (dev):");
-
+            const { dataset, unitbusiness, date } = await leerInputs(option='one');
             await triggerGlue( dataset, unitbusiness, date, done = true )
+            await loading();
 
         }
 
         // ALL
         if ( opt.includes( 'reset' ) && opt.includes( 'trigger' ) ) {
 
-            const dataset = await leerInputs("dataset:");
-            const unitbusiness = await leerInputs("unitbusiness:");
-            const date = await leerInputs("date:");
-            // const bucket_profile = await leerInputs("bucket_profile (dev):");
+            const {dataset, unitbusiness, date } = await leerInputs(option='all');
 
-            Promise.all( [ resetJobBookmark( dataset, unitbusiness, done = false ), triggerGlue( dataset, unitbusiness, date, done = true ) ] )
+            Promise.all(
+                [
+                    resetJobBookmark( dataset, unitbusiness, done = false ),
+                    triggerGlue( dataset, unitbusiness, date, done = true )
+                ])
+            await loading();
         }
 
-        await loading();
-
-    } while (opt !== "0");
+    } while (opt !== 0);
 };
 
 main();

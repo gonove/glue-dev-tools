@@ -9,11 +9,11 @@ const resetJobBookmark = async( dataset, unitbusiness, done ) => {
     exec( command, (err, output) => {
         // once the command has completed, the callback function is called
         if (err) {
-            // log and return if we encounter an error
             console.error("No se pudo ejecutar el comando 💔: ", err)
+            done ? continuar() : true
             return
         }
-        // log the output received from the command
+
         console.log("\n Reset Bookmark ✅: \n".bold, output)
         done ? continuar() : true
     })
