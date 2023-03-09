@@ -1,4 +1,4 @@
-const { inquirerMenu, leerInputs, loading, continuar } = require("./helpers/inquirer");
+const { inquirerMenu, leerInputs, loading } = require("./helpers/inquirer");
 const { resetJobBookmark, triggerGlue } = require("./helpers/runcommands");
 
 const main = async () => {
